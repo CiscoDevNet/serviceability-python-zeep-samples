@@ -1,4 +1,4 @@
-"""AXL <addFacInfo> / <updateFacInfo>sample script, using the zeep library
+"""Risport70 <selectCmDevice> sample script, using the Zeep SOAP library
 
 Install Python 2.7 or 3.7
 On Windows, choose the option to add to PATH environment variable
@@ -44,14 +44,14 @@ from zeep import Client, Settings, Plugin
 from zeep.transports import Transport
 from zeep.exceptions import Fault
 
-# Configure CUCM location and AXL credentials in creds.py
+# Configure CUCM location and user credentials in creds.py
 import creds
 
 # Change to true to enable output of request/response headers and XML
 DEBUG = False
 
-# The WSDL is a local file in the working directory, see README
-WSDL_FILE = 'AXLAPI.wsdl'
+# The WSDL is a local file in the root directory, see README
+WSDL_FILE = 'RISService70.wsdl'
 
 # This class lets you view the incoming and outgoing http headers and XML
 
@@ -86,7 +86,6 @@ Body:
             xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode') )
         )
 
-# This is where the meat of the application starts
 # The first step is to create a SOAP client session
 
 session = Session()
@@ -95,14 +94,14 @@ session = Session()
 
 session.verify = False
 
-# To enabled SSL cert checking (production)
+# To enabled SSL cert checking (recommended for production)
 # place the CUCM Tomcat cert .pem file in the root of the project
 # and uncomment the two lines below
 
 # CERT = 'changeme.pem'
 # session.verify = CERT
 
-session.auth = HTTPBasicAuth(creds.AXL_USERNAME, creds.AXL_PASSWORD)
+session.auth = HTTPBasicAuth(creds.USERNAME, creds.PASSWORD)
 
 transport = Transport( session = session, timeout = 10 )
 
@@ -111,50 +110,73 @@ settings = Settings( strict = False, xml_huge_tree = True )
 
 plugin = [ MyLoggingPlugin() ] if DEBUG else [ ]
 
-client = Client( WSDL_FILE, settings = settings, transport = transport,
-        plugins = plugin ) 
+service = Client( WSDL_FILE, settings = settings, transport = transport, plugins = plugin ).service
 
-service = client.create_service( "{http://www.cisco.com/AXLAPIService/}AXLAPIBinding",
-                                'https://{cucm}:8443/axl/'.format( cucm = creds.CUCM_ADDRESS ))
+# Build and execute the request
 
-# Add FAC
-fac_data = {
-    'name': 'testFAC',
-    'code': '1234',
-    'authorizationLevel': '0'
+stateInfo = ''  
+
+criteria = {  
+    'MaxReturnedDevices': '1000',  
+    'DeviceClass': 'Phone',  
+    'Model': '255',  
+    'Status': 'Registered',  
+    'NodeName': '',  
+    'SelectBy': 'Name',  
+    'Protocol': 'Any',  
+    'DownloadStatus': 'Any', 
+    'SelectItems': {
+        'Item': [ ]
+    } 
 }
 
+criteria['SelectItems']['Item'].append(
+    { 'item': '*'}
+)
+
 try:
-    resp = service.addFacInfo( fac_data )
+    resp = service.selectCmDevice( stateInfo, criteria )
 except Fault as err:
-    print('Zeep error: addFacInfo: {err}'.format( err = err))
+    print('Zeep error: selectCmDevice: {err}'.format( err = err))
 else:
-    print('addFacInfo response:')
+    print('selectCmDevice response:')
+    print()
     print(resp)
+    print()
 
-input( 'Press Enter to continue...')
+for node in resp['SelectCmDeviceResult']['CmNodes']['item']:
 
-# Update FAC
-try:
-    resp = service.updateFacInfo( name = 'testFAC',
-        newName = 'newTestFAC',
-        code = '5678',
-        authorizationLevel = '1' )
-except Fault as err:
-    print('Zeep error: updateFacInfo: {err}'.format( err = err))
-else:
-    print('updateFacInfo response:')
-    print(resp)
+    if node['ReturnCode'] != 'Ok':
+        continue
 
-input( 'Press Enter to continue...')
+    print( 'Node: ', node['Name'] )
+    print()
 
-# Delete FAC
-try:
-    resp = service.removeFacInfo( name = 'newTestFAC' )
-except Fault as err:
-    print('Zeep error: removeFacInfo: {err}'.format( err = err))
-else:
-    print('removeFacInfo response:')
-    print(resp)
+    print( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
+    name = 'Name',
+    ip = 'IP Address',
+    dirn = 'Directory Numbers',
+    desc = 'Description' ) )
 
-input( 'Press Enter to continue...')
+    print( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
+        name = '-'*17,
+        ip = '-'*17,
+        dirn = '-'*27,
+        desc = '-'*25 ) )
+
+    for device in node['CmDevices']['item']:
+
+        ipaddresses = device['IPAddress']
+
+        ipaddress = ipaddresses['item'][0]['IP'] if ipaddresses else ''
+
+        print ( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
+            name = device['Name'], 
+            ip = ipaddress, 
+            dirn = device['DirNumber'], 
+            desc = device['Description'] ) )
+
+    print()
+
+
+

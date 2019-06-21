@@ -1,12 +1,10 @@
-# axl-python-zeep-sample
+# serviceability-python-zeep-samples
 
 ## Overview
 
-This basic sample demonstrates how to use the Python Zeep SOAP library to provision a CUCM user, DN and phone via the AXL API
+Sample scripts demonstrating usage of various Cisco CUCM Serviceability APIs using Python and the Zeep SOAP library.
 
-https://developer.cisco.com/site/axl/
-
-The concepts and techniques shown can be extended to enable automated management of virtually any configuration or setting in the CUCM admin UI.
+https://developer.cisco.com/site/sxml/
 
 ## Getting started
 
@@ -25,22 +23,18 @@ The concepts and techniques shown can be extended to enable automated management
   $ pip install zeep
   ```
   
-* Edit axlZeep.py to specify your CUCM location and AXL user credentials
+* Edit creds.py to specify your CUCM location and Serviceability API user credentials
 
-* Add the AXL WSDL files for your CUCM version
+* Add the Serviceability API WSDL files for your CUCM version:
 
-    1. From the CUCM Administration UI, download the 'Cisco AXL Tookit' from **Applications** / **Plugins**
-
-    1. Unzip the kit, and navigate to the `schema/current` folder
-
-    1. Copy the three WSDL files to the root directory of this project: `AXLAPI.wsdl`, `AXLEnums.xsd`, `AXLSoap.xsd`
+  * **Risport70** - Download from the CUCM host at: [https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl](https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl)
 
 ## Hints
 
-* You can get a 'dump' of the AXL WSDL to see how Zeep interprets it by copying the AXL WSDL files to the project root (see above) and running (Mac/Linux):
+* You can get a 'dump' of the API WSDL to see how Zeep interprets it by copying the WSDL files to the project root (see above) and running (Mac/Linux):
 
     ```
-    python3 -mzeep AXLAPI.wsdl > wsdl.txt
+    python3 -mzeep RISService70.wsdl > wsdl.txt
     ```
 
     This can help with identifying the proper object structure to send to Zeep
@@ -81,14 +75,5 @@ The concepts and techniques shown can be extended to enable automated management
 
 ## Available samples
 
-* `axlZeep.py` - Demonstrates adding a user, line, and phone (`<addLine>`, `<addPhone>`, `<addUser>`, `<updatePhone>`, `<getUser>`)`
+* `risport70_selectCmDevice_all.py` - Demonstrates querying for all device registrations using Risport (`<selectCmDevice>`)
 
-* `axl_updateDevicePool` - Demonstrates updating an existing Device Pool to modify the Local Route Group settings (`<updateDevicePool>`)
-
-* `axl_add_partition_css.py` - Adds two partitions, then adds a CSS containing the two new partitions (`<addRoutePartition>`, `<addCss>`)
-
-* `axl_FAC.py` - Adds a new FAC, updates it, then deletes it (`<addFacInfo>`, `<updateFacInfo>`, `<removeFacInfo>`)
-
-* `axl_add_sip_trunk.py` - Adds a new SIP trunk with destination address, then deletes it (`<addSipTrunk`, `<removeSipTrunk>`)
-
-[![published](https://static.production.devnetcloud.com/codeexchange/assets/images/devnet-published.svg)](https://developer.cisco.com/codeexchange/github/repo/CiscoDevNet/axl-python-zeep-sample)
