@@ -1,6 +1,4 @@
-AXLAPI.wsdl
-AXLEnums.xsd
-AXLSoap.xsd
+RISService70*
 .vscode/
 *.pyc
 wsdl.txt
