@@ -56,17 +56,17 @@ https://developer.cisco.com/site/sxml/
 
     are represented a little differently than expected by Zeep.  Note that `<member>` becomes an array, not `<members>`:
 
-    ```json
+    ```python
     { 
-        members: {
-            member: [
+        'members': {
+            'member': [
                 {
-                    "subElement1": None,
-                    "subElement2": None
+                    'subElement1': 'value',
+                    'subElement2': 'value'
                 },
                                 {
-                    "subElement1": None,
-                    "subElement2": None
+                    'subElement1': 'value',
+                    'subElement2': 'value'
                 }
             ]
         }
