@@ -110,7 +110,10 @@ settings = Settings( strict = False, xml_huge_tree = True )
 
 plugin = [ MyLoggingPlugin() ] if DEBUG else [ ]
 
-service = Client( WSDL_FILE, settings = settings, transport = transport, plugins = plugin ).service
+client = Client( WSDL_FILE, settings = settings, transport = transport, plugins = plugin )
+
+service = client.create_service( '{http://schemas.cisco.com/ast/soap}RisBinding',
+    'https://{cucm}:8443/realtimeservice2/services/RISService70'.format( cucm = creds.CUCM_ADDRESS ))
 
 # Build and execute the request
 
