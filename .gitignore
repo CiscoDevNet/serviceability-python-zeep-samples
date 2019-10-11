@@ -1,4 +1,4 @@
-RISService70*
-.vscode/
+.vscode/settings.json
+__pycache__
 *.pyc
 wsdl.txt

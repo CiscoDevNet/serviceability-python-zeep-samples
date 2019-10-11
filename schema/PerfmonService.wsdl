@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://schemas.cisco.com/ast/soap" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://schemas.cisco.com/ast/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types>
+    <schema elementFormDefault="qualified" targetNamespace="http://schemas.cisco.com/ast/soap" xmlns="http://www.w3.org/2001/XMLSchema">
+			<complexType name="InstanceNameType">
+				<simpleContent>
+					<extension base="string"/>
+				</simpleContent>
+			</complexType>
+			<element name="perfmonOpenSession">
+				<complexType/>
+			</element>
+			<element name="perfmonOpenSessionResponse">
+				<complexType>
+					<sequence>
+						<element name="perfmonOpenSessionReturn" type="tns:SessionHandleType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="SessionHandleType">
+				<simpleContent>
+					<extension base="string"/>
+				</simpleContent>
+			</complexType>
+			<element name="perfmonAddCounter">
+				<complexType>
+					<sequence>
+						<element name="SessionHandle" type="tns:SessionHandleType"/>
+						<element name="ArrayOfCounter" type="tns:RequestArrayOfCounterType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="RequestArrayOfCounterType">
+				<sequence>
+					<element maxOccurs="unbounded" name="Counter" type="tns:CounterType"/>
+				</sequence>
+			</complexType>
+			<complexType name="CounterType">
+				<sequence>
+					<element name="Name" nillable="true" type="tns:CounterNameType"/>
+				</sequence>
+			</complexType>
+			<element name="perfmonAddCounterResponse">
+				<complexType/>
+			</element>
+			<element name="perfmonRemoveCounter">
+				<complexType>
+					<sequence>
+						<element name="SessionHandle" type="tns:SessionHandleType"/>
+						<element name="ArrayOfCounter" type="tns:RequestArrayOfCounterType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonRemoveCounterResponse">
+				<complexType/>
+			</element>
+			<element name="perfmonCollectSessionData">
+				<complexType>
+					<sequence>
+						<element name="SessionHandle" type="tns:SessionHandleType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonCollectSessionDataResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="perfmonCollectSessionDataReturn" type="tns:CounterInfoType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="CounterInfoType">
+				<sequence>
+					<element name="Name" nillable="true" type="tns:CounterNameType"/>
+					<element name="Value" type="long"/>
+					<element name="CStatus" type="unsignedInt"/>
+				</sequence>
+			</complexType>
+			<element name="perfmonCloseSession">
+				<complexType>
+					<sequence>
+						<element name="SessionHandle" type="tns:SessionHandleType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonCloseSessionResponse">
+				<complexType/>
+			</element>
+			<element name="perfmonListInstance">
+				<complexType>
+					<sequence>
+						<element name="Host" type="string"/>
+						<element name="Object" type="tns:ObjectNameType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="ObjectNameType">
+				<simpleContent>
+					<extension base="string"/>
+				</simpleContent>
+			</complexType>
+			<element name="perfmonListInstanceResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="perfmonListInstanceReturn" type="tns:InstanceType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="InstanceType">
+				<sequence>
+					<element name="Name" nillable="true" type="tns:InstanceNameType"/>
+				</sequence>
+			</complexType>
+			<element name="perfmonQueryCounterDescription">
+				<complexType>
+					<sequence>
+						<element name="Counter" type="tns:CounterNameType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="CounterNameType">
+				<simpleContent>
+					<extension base="string"/>
+				</simpleContent>
+			</complexType>
+			<element name="perfmonQueryCounterDescriptionResponse">
+				<complexType>
+					<sequence>
+						<element name="perfmonQueryCounterDescriptionReturn" nillable="true" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonListCounter">
+				<complexType>
+					<sequence>
+						<element name="Host" type="string"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonListCounterResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="1" name="perfmonListCounterReturn" type="tns:ObjectInfoType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<complexType name="ArrayOfCounterType">
+				<sequence>
+					<element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:CounterType"/>
+				</sequence>
+			</complexType>
+			<complexType name="ObjectInfoType">
+				<sequence>
+					<element name="Name" nillable="true" type="tns:ObjectNameType"/>
+					<element name="MultiInstance" type="boolean"/>
+					<element name="ArrayOfCounter" nillable="true" type="tns:ArrayOfCounterType"/>
+				</sequence>
+			</complexType>
+			<element name="perfmonCollectCounterData">
+				<complexType>
+					<sequence>
+						<element name="Host" type="string"/>
+						<element name="Object" type="tns:ObjectNameType"/>
+					</sequence>
+				</complexType>
+			</element>
+			<element name="perfmonCollectCounterDataResponse">
+				<complexType>
+					<sequence>
+						<element maxOccurs="unbounded" minOccurs="0" name="perfmonCollectCounterDataReturn" type="tns:CounterInfoType"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+  </types>
+  <message name="perfmonAddCounterResponse">
+    <part name="parameters" element="tns:perfmonAddCounterResponse">
+    </part>
+  </message>
+  <message name="perfmonOpenSessionRequest">
+    <part name="parameters" element="tns:perfmonOpenSession">
+    </part>
+  </message>
+  <message name="perfmonListInstanceRequest">
+    <part name="parameters" element="tns:perfmonListInstance">
+    </part>
+  </message>
+  <message name="perfmonAddCounterRequest">
+    <part name="parameters" element="tns:perfmonAddCounter">
+    </part>
+  </message>
+  <message name="perfmonQueryCounterDescriptionRequest">
+    <part name="parameters" element="tns:perfmonQueryCounterDescription">
+    </part>
+  </message>
+  <message name="perfmonCollectSessionDataResponse">
+    <part name="parameters" element="tns:perfmonCollectSessionDataResponse">
+    </part>
+  </message>
+  <message name="perfmonListCounterRequest">
+    <part name="parameters" element="tns:perfmonListCounter">
+    </part>
+  </message>
+  <message name="perfmonQueryCounterDescriptionResponse">
+    <part name="parameters" element="tns:perfmonQueryCounterDescriptionResponse">
+    </part>
+  </message>
+  <message name="perfmonListCounterResponse">
+    <part name="parameters" element="tns:perfmonListCounterResponse">
+    </part>
+  </message>
+  <message name="perfmonRemoveCounterRequest">
+    <part name="parameters" element="tns:perfmonRemoveCounter">
+    </part>
+  </message>
+  <message name="perfmonCloseSessionResponse">
+    <part name="parameters" element="tns:perfmonCloseSessionResponse">
+    </part>
+  </message>
+  <message name="perfmonOpenSessionResponse">
+    <part name="parameters" element="tns:perfmonOpenSessionResponse">
+    </part>
+  </message>
+  <message name="perfmonRemoveCounterResponse">
+    <part name="parameters" element="tns:perfmonRemoveCounterResponse">
+    </part>
+  </message>
+  <message name="perfmonCollectCounterDataRequest">
+    <part name="parameters" element="tns:perfmonCollectCounterData">
+    </part>
+  </message>
+  <message name="perfmonListInstanceResponse">
+    <part name="parameters" element="tns:perfmonListInstanceResponse">
+    </part>
+  </message>
+  <message name="perfmonCloseSessionRequest">
+    <part name="parameters" element="tns:perfmonCloseSession">
+    </part>
+  </message>
+  <message name="perfmonCollectCounterDataResponse">
+    <part name="parameters" element="tns:perfmonCollectCounterDataResponse">
+    </part>
+  </message>
+  <message name="perfmonCollectSessionDataRequest">
+    <part name="parameters" element="tns:perfmonCollectSessionData">
+    </part>
+  </message>
+  <portType name="PerfmonPortType">
+    <operation name="perfmonOpenSession">
+      <input name="perfmonOpenSessionRequest" message="tns:perfmonOpenSessionRequest">
+    </input>
+      <output name="perfmonOpenSessionResponse" message="tns:perfmonOpenSessionResponse">
+    </output>
+    </operation>
+    <operation name="perfmonAddCounter">
+      <input name="perfmonAddCounterRequest" message="tns:perfmonAddCounterRequest">
+    </input>
+      <output name="perfmonAddCounterResponse" message="tns:perfmonAddCounterResponse">
+    </output>
+    </operation>
+    <operation name="perfmonRemoveCounter">
+      <input name="perfmonRemoveCounterRequest" message="tns:perfmonRemoveCounterRequest">
+    </input>
+      <output name="perfmonRemoveCounterResponse" message="tns:perfmonRemoveCounterResponse">
+    </output>
+    </operation>
+    <operation name="perfmonCollectSessionData">
+      <input name="perfmonCollectSessionDataRequest" message="tns:perfmonCollectSessionDataRequest">
+    </input>
+      <output name="perfmonCollectSessionDataResponse" message="tns:perfmonCollectSessionDataResponse">
+    </output>
+    </operation>
+    <operation name="perfmonCloseSession">
+      <input name="perfmonCloseSessionRequest" message="tns:perfmonCloseSessionRequest">
+    </input>
+      <output name="perfmonCloseSessionResponse" message="tns:perfmonCloseSessionResponse">
+    </output>
+    </operation>
+    <operation name="perfmonListInstance">
+      <input name="perfmonListInstanceRequest" message="tns:perfmonListInstanceRequest">
+    </input>
+      <output name="perfmonListInstanceResponse" message="tns:perfmonListInstanceResponse">
+    </output>
+    </operation>
+    <operation name="perfmonQueryCounterDescription">
+      <input name="perfmonQueryCounterDescriptionRequest" message="tns:perfmonQueryCounterDescriptionRequest">
+    </input>
+      <output name="perfmonQueryCounterDescriptionResponse" message="tns:perfmonQueryCounterDescriptionResponse">
+    </output>
+    </operation>
+    <operation name="perfmonListCounter">
+      <input name="perfmonListCounterRequest" message="tns:perfmonListCounterRequest">
+    </input>
+      <output name="perfmonListCounterResponse" message="tns:perfmonListCounterResponse">
+    </output>
+    </operation>
+    <operation name="perfmonCollectCounterData">
+      <input name="perfmonCollectCounterDataRequest" message="tns:perfmonCollectCounterDataRequest">
+    </input>
+      <output name="perfmonCollectCounterDataResponse" message="tns:perfmonCollectCounterDataResponse">
+    </output>
+    </operation>
+  </portType>
+  <binding name="PerfmonBinding" type="tns:PerfmonPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="perfmonOpenSession">
+      <soap:operation soapAction="perfmonOpenSession"/>
+      <input name="perfmonOpenSessionRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonOpenSessionResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonAddCounter">
+      <soap:operation soapAction="perfmonAddCounter"/>
+      <input name="perfmonAddCounterRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonAddCounterResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonRemoveCounter">
+      <soap:operation soapAction="perfmonRemoveCounter"/>
+      <input name="perfmonRemoveCounterRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonRemoveCounterResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonCollectSessionData">
+      <soap:operation soapAction="perfmonCollectSessionData"/>
+      <input name="perfmonCollectSessionDataRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonCollectSessionDataResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonCloseSession">
+      <soap:operation soapAction="perfmonCloseSession"/>
+      <input name="perfmonCloseSessionRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonCloseSessionResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonListInstance">
+      <soap:operation soapAction="perfmonListInstance"/>
+      <input name="perfmonListInstanceRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonListInstanceResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonQueryCounterDescription">
+      <soap:operation soapAction="perfmonQueryCounterDescription"/>
+      <input name="perfmonQueryCounterDescriptionRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonQueryCounterDescriptionResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonListCounter">
+      <soap:operation soapAction="perfmonListCounter"/>
+      <input name="perfmonListCounterRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonListCounterResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+    <operation name="perfmonCollectCounterData">
+      <soap:operation soapAction="perfmonCollectCounterData"/>
+      <input name="perfmonCollectCounterDataRequest">
+        <soap:body use="literal"/>
+      </input>
+      <output name="perfmonCollectCounterDataResponse">
+        <soap:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="PerfmonService">
+    <port name="PerfmonPort" binding="tns:PerfmonBinding">
+      <soap:address location="https://localhost:8443/perfmonservice2/services/PerfmonService"/>
+    </port>
+  </service>
+</definitions>

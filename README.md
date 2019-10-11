@@ -6,35 +6,48 @@ Sample scripts demonstrating usage of various Cisco CUCM Serviceability APIs usi
 
 https://developer.cisco.com/site/sxml/
 
+## Available samples
+
+* `risport70_selectCmDevice.py` - Demonstrates querying for all device registrations using Risport (`<selectCmDevice>`)
+
+* `perfmonPort_collect_counter_data.py` - Demonstrates retrieving and parsing performance counter data via the Perfmon `<perfmonCollectCounterData>` request
+
 ## Getting started
 
-* Install Python 2.7 or 3.7
-  On Windows, choose the option to add to PATH environment variable
+* Install 3.7
 
-* If this is a fresh installation, update pip (you may need to use `pip3` on Linux or Mac)
+  (On Windows, choose the option to add to PATH environment variable)
 
-  ```
-  $ python -m pip install --upgrade pip
-  ```
-  
 * Dependency Installation:
 
-  ```
-  $ pip install zeep
+  ```bash
+  pip install -r requirements.txt
   ```
   
-* Edit creds.py to specify your CUCM location and Serviceability API user credentials
+* Edit `creds.py` to specify your CUCM address and [Serviceability API user credentials](https://d1nmyq4gcgsfi5.cloudfront.net/site/sxml/help/faq/#sec-1)
 
-* Add the Serviceability API WSDL files for your CUCM version:
+* The Serviceability SOAP API WSDL files for CUCM v12.5 are included in this project.  If you'd like to use a different version, replace the files in `schema/` with the versions from your CUCM, which can be retrieved at:
 
-  * **Risport70** - Download from the CUCM host at: [https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl](https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl)
+    * CDRonDemand: `https://{cucm}/CDRonDemandService2/services/CDRonDemandService?wsdl`
+
+    * Log Collection: `https://{cucm}:8443/logcollectionservice2/services/LogCollectionPortTypeService?wsdl`
+
+    * PerfMon: `https://{cucm}:8443/perfmonservice2/services/PerfmonService?wsdl`
+
+    * RisPort70: `https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl`
+
+    * Control Center Services:
+    
+        `https://ServerName:8443/controlcenterservice2/services/ControlCenterServices?wsdl`  
+        `https://ServerName:8443/controlcenterservice2/services/ControlCenterServicesEx?wsdl`
+
 
 ## Hints
 
-* You can get a 'dump' of the API WSDL to see how Zeep interprets it by copying the WSDL files to the project root (see above) and running (Mac/Linux):
+* You can get a 'dump' of an API WSDL to see how Zeep interprets it, for example by running (Mac/Linux):
 
-    ```
-    python3 -mzeep RISService70.wsdl > wsdl.txt
+    ```bash
+    python3 -mzeep schema/PerfmonService.wsdl > wsdl.txt
     ```
 
     This can help with identifying the proper object structure to send to Zeep
@@ -50,14 +63,14 @@ https://developer.cisco.com/site/sxml/
         <member>
             <subElement1/>
             <subElement2/>
-        </member>        
+        </member>
     </members>
     ```
 
     are represented a little differently than expected by Zeep.  Note that `<member>` becomes an array, not `<members>`:
 
     ```python
-    { 
+    {
         'members': {
             'member': [
                 {
@@ -72,8 +85,3 @@ https://developer.cisco.com/site/sxml/
         }
     }
     ```
-
-## Available samples
-
-* `risport70_selectCmDevice_all.py` - Demonstrates querying for all device registrations using Risport (`<selectCmDevice>`)
-

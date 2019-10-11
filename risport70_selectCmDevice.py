@@ -1,22 +1,8 @@
-"""Risport70 <selectCmDevice> sample script, using the Zeep SOAP library
-
-Install Python 2.7 or 3.7
-On Windows, choose the option to add to PATH environment variable
-
-If this is a fresh installation, update pip (you may need to use `pip3` on Linux or Mac)
-
-    $ python -m pip install --upgrade pip
-
-Script Dependencies:
-    lxml
-    requests
-    zeep
+"""Risport70 <selectCmDevice> sample script
 
 Dependency Installation:
 
-    $ pip install zeep
-
-This will install automatically all of zeep dependencies, including lxml, requests
+    $ pip install -r requirements.txt
 
 Copyright (c) 2018 Cisco and/or its affiliates.
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -51,40 +37,25 @@ import creds
 DEBUG = False
 
 # The WSDL is a local file in the root directory, see README
-WSDL_FILE = 'RISService70.wsdl'
+WSDL_FILE = 'schema/RISService70.wsdl'
 
 # This class lets you view the incoming and outgoing http headers and XML
 
-class MyLoggingPlugin(Plugin):
+class MyLoggingPlugin( Plugin ):
 
-    def egress(self, envelope, http_headers, operation, binding_options):
-        print(
-'''Request
--------
-Headers:
-{headers}
+    def egress( self, envelope, http_headers, operation, binding_options ):
 
-Body:
-{xml}
+        # Format the request body as pretty printed XML
+        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
 
-'''.format( headers = http_headers, 
-            xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode') )
-        )
+        print( f'\nRequest\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
 
     def ingress( self, envelope, http_headers, operation ):
-        print('\n')
-        print(
-'''Response
--------
-Headers:
-{headers}
 
-Body:
-{xml}
+        # Format the response body as pretty printed XML
+        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
 
-'''.format( headers = http_headers, 
-            xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode') )
-        )
+        print( f'\nResponse\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
 
 # The first step is to create a SOAP client session
 
@@ -112,10 +83,13 @@ plugin = [ MyLoggingPlugin() ] if DEBUG else [ ]
 
 client = Client( WSDL_FILE, settings = settings, transport = transport, plugins = plugin )
 
-service = client.create_service( '{http://schemas.cisco.com/ast/soap}RisBinding',
-    'https://{cucm}:8443/realtimeservice2/services/RISService70'.format( cucm = creds.CUCM_ADDRESS ))
+# Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
+service = client.create_service(
+    '{http://schemas.cisco.com/ast/soap}RisBinding',
+    f'https://{creds.CUCM_ADDRESS}:8443/realtimeservice2/services/RISService70' 
+)
 
-# Build and execute the request
+# Build and execute the request object
 
 stateInfo = ''  
 
@@ -133,23 +107,25 @@ criteria = {
     } 
 }
 
+# One or more specific devices can be retrieved by replacing * with
+# the device name in multiple items
 criteria['SelectItems']['Item'].append(
     { 'item': '*'}
 )
 
+# Execute the request
+
 try:
     resp = service.selectCmDevice( stateInfo, criteria )
 except Fault as err:
-    print('Zeep error: selectCmDevice: {err}'.format( err = err))
+    print( f'Zeep error: selectCmDevice: {err}' )
 else:
-    print('selectCmDevice response:')
-    print()
-    print(resp)
-    print()
+    print( 'selectCmDevice response:\n' )
+    print(resp, '\n')
 
-for node in resp['SelectCmDeviceResult']['CmNodes']['item']:
+for node in resp[ 'SelectCmDeviceResult' ][ 'CmNodes' ][ 'item' ]:
 
-    if node['ReturnCode'] != 'Ok':
+    if node[ 'ReturnCode' ] != 'Ok':
         continue
 
     print( 'Node: ', node['Name'] )
@@ -167,17 +143,17 @@ for node in resp['SelectCmDeviceResult']['CmNodes']['item']:
         dirn = '-'*27,
         desc = '-'*25 ) )
 
-    for device in node['CmDevices']['item']:
+    for device in node[ 'CmDevices' ][ 'item' ]:
 
-        ipaddresses = device['IPAddress']
+        ipaddresses = device[ 'IPAddress' ]
 
-        ipaddress = ipaddresses['item'][0]['IP'] if ipaddresses else ''
+        ipaddress = ipaddresses[ 'item' ][0][ 'IP' ] if ipaddresses else ''
 
         print ( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
-            name = device['Name'], 
+            name = device[ 'Name' ], 
             ip = ipaddress, 
-            dirn = device['DirNumber'], 
-            desc = device['Description'] ) )
+            dirn = device[ 'DirNumber' ], 
+            desc = device[ 'Description' ] ) )
 
     print()
 
