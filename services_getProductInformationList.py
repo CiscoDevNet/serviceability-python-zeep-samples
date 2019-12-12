@@ -1,7 +1,7 @@
-"""Serviceability Perfmon <perfmonCollectCounterData> sample script
+"""Serviceability Control Center Services <getProductInformationList> sample script
 
-Performs a <perfmonCollectCounterData> request for the 'Cisco CallManager' object
-using the Zeep SOAP library, and parses/prints the results in a simple table output.
+Performs a <getProductInformationList> request using the Zeep SOAP library, and 
+parses/prints the <Product> results in a simple table output.
 
 Dependency Installation:
 
@@ -37,10 +37,10 @@ from zeep.exceptions import Fault
 import creds
 
 # Change to true to enable output of request/response headers and XML
-DEBUG = False
+DEBUG = True
 
 # The WSDL is a local file in the working directory, see README
-WSDL_FILE = 'schema/PerfmonService.wsdl'
+WSDL_FILE = 'schema/ControlCenterServices.wsdl'
 
 # This class lets you view the incoming and outgoing HTTP headers and XML
 
@@ -90,38 +90,34 @@ client = Client( WSDL_FILE, settings = settings, transport = transport, plugins 
 
 # Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
 service = client.create_service(
-    '{http://schemas.cisco.com/ast/soap}PerfmonBinding',
-    f'https://{creds.CUCM_ADDRESS}:8443/perfmonservice2/services/PerfmonService' 
+    '{http://schemas.cisco.com/ast/soap}ControlCenterServicesBinding',
+    f'https://{creds.CUCM_ADDRESS}:8443/controlcenterservice2/services/ControlCenterServices' 
     )
 
 # Execute the request
 try:
-	resp = service.perfmonCollectCounterData(
-        Host = creds.CUCM_ADDRESS,
-        Object = 'Cisco CallManager'
-        )
+	resp = service.getProductInformationList( '' )
 except Fault as err:
-	print( f'Zeep error: perfmonCollectCounterData: {err}' )
+	print( f'Zeep error: getProductInformationList: {err}' )
 else:
-	print( "\nperfmonCollectCounterData response:\n" )
+	print( "\ngetProductInformationList response:\n" )
 	print( resp,"\n" )
 
 input( 'Press Enter to continue...' )
 
 # Create a simple report of the XML response
-print( '\nperfmonCollectCounterData output for "Cisco CallManager"' )
-print( '=======================================================\n')
+print( '\ngetProductInformationList output - Products' )
+print( ( '=' * 65 ) + '\n' )
 
 # Loop through the top-level of the response object
-for item in resp:
+for item in resp.Products.item:
 
-    # Extract the final value in the counter path, which sould be the counter name
-    counterPath = item.Name._value_1
-    last = counterPath.rfind( '\\' ) + 1
-    counterName = counterPath[ last: ]
+    # Extract the Product name/version values
+    productName = item.ProductName
+    productVersion = item.ProductVersion
 
-    # Print the name and value, padding/truncating the name to 49 characters
-    print( '{:49.49}'.format( counterName ) + ' : ' + str( item.Value ) )
+    # Print the name and version, padding/truncating the name to 49 characters
+    print( '{:49.49}'.format( productName ) + 'v' + productVersion )
 
 
 

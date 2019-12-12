@@ -12,6 +12,8 @@ https://developer.cisco.com/site/sxml/
 
 * `perfmonPort_collect_counter_data.py` - Demonstrates retrieving and parsing performance counter data via the Perfmon `<perfmonCollectCounterData>` request
 
+* `services_getProductInformationList.py` - Use Control Center Services to retrieve a list of the installed Products and versions (`<getProductInformationList>`)
+
 ## Getting started
 
 * Install 3.7
@@ -36,18 +38,16 @@ https://developer.cisco.com/site/sxml/
 
     * RisPort70: `https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl`
 
-    * Control Center Services:
-    
-        `https://ServerName:8443/controlcenterservice2/services/ControlCenterServices?wsdl`  
-        `https://ServerName:8443/controlcenterservice2/services/ControlCenterServicesEx?wsdl`
+    * Control Center Services: `https://ServerName:8443/controlcenterservice2/services/ControlCenterServices?wsdl`
 
+    * Control Center Services Extended: `https://ServerName:8443/controlcenterservice2/services/ControlCenterServicesEx?wsdl`
 
 ## Hints
 
 * You can get a 'dump' of an API WSDL to see how Zeep interprets it, for example by running (Mac/Linux):
 
     ```bash
-    python3 -mzeep schema/PerfmonService.wsdl > wsdl.txt
+    python3 -mzeep schema/PerfmonService.wsdl > PerfmonServiceWsdl.txt
     ```
 
     This can help with identifying the proper object structure to send to Zeep

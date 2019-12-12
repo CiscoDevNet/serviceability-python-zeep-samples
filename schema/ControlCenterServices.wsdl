@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://schemas.cisco.com/ast/soap" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://schemas.cisco.com/ast/soap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://schemas.cisco.com/ast/soap" xmlns="http://www.w3.org/2001/XMLSchema">
+   
+   <element name="soapGetStaticServiceList">
+    <complexType>
+     <sequence>
+      <element name="ServiceInformationResponse" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="soapGetStaticServiceListResponse">
+    <complexType>
+     <sequence>
+      <element name="soapGetStaticServiceListReturn" type="tns:StaticServiceList"/>
+     </sequence>
+    </complexType>
+   </element>
+   
+   <complexType name="DependentServices">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="Service" type="xsd:string"/>
+    </sequence>
+   </complexType> 
+   
+   <complexType name="ArrayOfServices">
+       <sequence>
+        <element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="xsd:string"/>
+       </sequence>
+   </complexType>
+   
+   <complexType name="ServiceSpecification">
+    <sequence>
+     <element name="ServiceName" nillable="true" type="xsd:string"/>
+     <element name="ServiceType" nillable="true" type="tns:ServiceTypes"/>
+     <element name="Deployable" type="xsd:boolean"/>
+     <element name="GroupName" nillable="true" type="xsd:string"/>
+     <element name="DependentServices" nillable="true" type="tns:DependentServices"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfServiceSpecification">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:ServiceSpecification"/>
+    </sequence>
+   </complexType>
+   <complexType name="StaticServiceList">
+    <sequence>
+     <element name="Services" nillable="true" type="tns:ArrayOfServiceSpecification"/>
+    </sequence>
+   </complexType>
+   <element name="soapGetServiceStatus">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="ServiceStatus" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="soapGetServiceStatusResponse">
+    <complexType>
+     <sequence>
+      <element name="soapGetServiceStatusReturn" type="tns:ServiceInformationResponse"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ServiceInformation">
+    <sequence>
+     <element name="ServiceName" nillable="true" type="xsd:string"/>
+     <element name="ServiceStatus" nillable="true" type="tns:ServiceStatus"/>
+     <element name="ReasonCode" nillable="true" type="xsd:integer"/>
+     <element name="ReasonCodeString" nillable="true" type="xsd:string"/>
+     <element name="StartTime" nillable="true" type="xsd:string"/>
+     <element name="UpTime" nillable="true" type="xsd:integer"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfServiceInformation">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:ServiceInformation"/>
+    </sequence>
+   </complexType>
+   <complexType name="ServiceInformationResponse">
+    <sequence>
+     <element name="ReturnCode" nillable="true" type="tns:ReturnCode"/>
+     <element name="ReasonCode" nillable="true" type="xsd:integer"/>
+     <element name="ReasonString" nillable="true" type="xsd:string"/>
+     <element name="ServiceInfoList" nillable="true" type="tns:ArrayOfServiceInformation"/>
+    </sequence>
+   </complexType>
+   <element name="soapDoServiceDeployment">
+    <complexType>
+     <sequence>
+      <element name="DeploymentServiceRequest" type="tns:DeploymentServiceRequest"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="DeploymentServiceRequest">
+    <sequence>
+     <element name="NodeName" nillable="true" type="xsd:string"/>
+     <element name="DeployType" nillable="true" type="tns:DeployType"/>
+     <element name="ServiceList" nillable="true" type="tns:ArrayOfServices"/>
+    </sequence>
+   </complexType>
+   <element name="soapDoServiceDeploymentResponse">
+    <complexType>
+     <sequence>
+      <element name="soapDoServiceDeploymentReturn" type="tns:ServiceInformationResponse"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="soapDoControlServices">
+    <complexType>
+     <sequence>
+      <element name="ControlServiceRequest" type="tns:ControlServiceRequest"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ControlServiceRequest">
+    <sequence>
+     <element name="NodeName" nillable="true" type="xsd:string"/>
+     <element name="ControlType" nillable="true" type="tns:ControlType"/>
+     <element name="ServiceList" nillable="true" type="tns:ArrayOfServices"/>
+    </sequence>
+   </complexType>
+   <element name="soapDoControlServicesResponse">
+    <complexType>
+     <sequence>
+      <element name="soapDoControlServicesReturn" type="tns:ServiceInformationResponse"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProductInformationList">
+    <complexType>
+     <sequence>
+      <element name="ServiceInfo" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getProductInformationListResponse">
+    <complexType>
+     <sequence>
+      <element name="getProductInformationListReturn" type="tns:GetProductInformationListResponse"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="InstalledProduct">
+    <sequence>
+     <element name="ProductName" nillable="true" type="xsd:string"/>
+     <element name="ProductVersion" nillable="true" type="xsd:string"/>
+     <element name="ProductDescription" nillable="true" type="xsd:string"/>
+     <element name="ProductID" nillable="true" type="xsd:string"/>
+     <element name="ShortName" nillable="true" type="xsd:string"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfInstalledProduct">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:InstalledProduct"/>
+    </sequence>
+   </complexType>
+   <complexType name="ProductServiceSpecification">
+    <sequence>
+     <element name="ServiceName" nillable="true" type="xsd:string"/>
+     <element name="ServiceType" nillable="true" type="tns:ServiceTypes"/>
+     <element name="Deployable" type="xsd:boolean"/>
+     <element name="GroupName" nillable="true" type="xsd:string"/>
+     <element name="ProductID" nillable="true" type="xsd:string"/>
+     <element name="DependentServices" nillable="true" type="tns:DependentServices"/>
+    </sequence>
+   </complexType>
+   <complexType name="ArrayOfProductServiceSpecification">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="tns:ProductServiceSpecification"/>
+    </sequence>
+   </complexType>
+   <complexType name="GetProductInformationListResponse">
+    <sequence>
+     <element name="ActiveServerVersion" nillable="true" type="xsd:string"/>
+     <element name="PrimaryNode" nillable="true" type="xsd:string"/>
+     <element name="SecondaryNode" nillable="true" type="xsd:string"/>
+     <element name="Products" nillable="true" type="tns:ArrayOfInstalledProduct"/>
+     <element name="Services" nillable="true" type="tns:ArrayOfProductServiceSpecification"/>
+    </sequence>
+   </complexType>
+  
+  
+  
+  
+  
+  
+   <simpleType name="ServiceTypes">
+    <restriction base="xsd:string">
+     <enumeration value="Service"/>
+     <enumeration value="Servlet"/>
+    </restriction>
+   </simpleType>
+   <complexType name="ReturnCode">
+    <simpleContent>
+     <extension base="xsd:string"/>
+    </simpleContent>
+   </complexType>
+   <simpleType name="ServiceStatus">
+    <restriction base="xsd:string">
+     <enumeration value="Started"/>
+     <enumeration value="Stopped"/>
+     <enumeration value="Starting"/>
+     <enumeration value="Stopping"/>
+     <enumeration value="Unknown"/>
+    </restriction>
+   </simpleType>
+   <simpleType name="DeployType">
+    <restriction base="xsd:string">
+     <enumeration value="Deploy"/>
+     <enumeration value="UnDeploy"/>
+    </restriction>
+   </simpleType>
+   <simpleType name="ControlType">
+    <restriction base="xsd:string">
+     <enumeration value="Start"/>
+     <enumeration value="Stop"/>
+     <enumeration value="Restart"/>
+    </restriction>
+   </simpleType>
+  </schema>
+  </wsdl:types>
+  <wsdl:message name="soapGetServiceStatusResponse">
+    <wsdl:part name="parameters" element="tns:soapGetServiceStatusResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductInformationListRequest">
+    <wsdl:part name="parameters" element="tns:getProductInformationList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapGetStaticServiceListResponse">
+    <wsdl:part name="parameters" element="tns:soapGetStaticServiceListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapGetServiceStatusRequest">
+    <wsdl:part name="parameters" element="tns:soapGetServiceStatus">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapGetStaticServiceListRequest">
+    <wsdl:part name="parameters" element="tns:soapGetStaticServiceList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapDoServiceDeploymentResponse">
+    <wsdl:part name="parameters" element="tns:soapDoServiceDeploymentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductInformationListResponse">
+    <wsdl:part name="parameters" element="tns:getProductInformationListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapDoControlServicesResponse">
+    <wsdl:part name="parameters" element="tns:soapDoControlServicesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapDoControlServicesRequest">
+    <wsdl:part name="parameters" element="tns:soapDoControlServices">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="soapDoServiceDeploymentRequest">
+    <wsdl:part name="parameters" element="tns:soapDoServiceDeployment">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ControlCenterServicesPort">
+    <wsdl:operation name="soapGetStaticServiceList">
+      <wsdl:input name="soapGetStaticServiceListRequest" message="tns:soapGetStaticServiceListRequest">
+    </wsdl:input>
+      <wsdl:output name="soapGetStaticServiceListResponse" message="tns:soapGetStaticServiceListResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapGetServiceStatus">
+      <wsdl:input name="soapGetServiceStatusRequest" message="tns:soapGetServiceStatusRequest">
+    </wsdl:input>
+      <wsdl:output name="soapGetServiceStatusResponse" message="tns:soapGetServiceStatusResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapDoServiceDeployment">
+      <wsdl:input name="soapDoServiceDeploymentRequest" message="tns:soapDoServiceDeploymentRequest">
+    </wsdl:input>
+      <wsdl:output name="soapDoServiceDeploymentResponse" message="tns:soapDoServiceDeploymentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapDoControlServices">
+      <wsdl:input name="soapDoControlServicesRequest" message="tns:soapDoControlServicesRequest">
+    </wsdl:input>
+      <wsdl:output name="soapDoControlServicesResponse" message="tns:soapDoControlServicesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductInformationList">
+      <wsdl:input name="getProductInformationListRequest" message="tns:getProductInformationListRequest">
+    </wsdl:input>
+      <wsdl:output name="getProductInformationListResponse" message="tns:getProductInformationListResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ControlCenterServicesBinding" type="tns:ControlCenterServicesPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="soapGetStaticServiceList">
+      <soap:operation soapAction="soapGetStaticServiceList"/>
+      <wsdl:input name="soapGetStaticServiceListRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="soapGetStaticServiceListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapGetServiceStatus">
+      <soap:operation soapAction="soapGetServiceStatus"/>
+      <wsdl:input name="soapGetServiceStatusRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="soapGetServiceStatusResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapDoServiceDeployment">
+      <soap:operation soapAction="soapDoServiceDeployment"/>
+      <wsdl:input name="soapDoServiceDeploymentRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="soapDoServiceDeploymentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="soapDoControlServices">
+      <soap:operation soapAction="soapDoControlServices"/>
+      <wsdl:input name="soapDoControlServicesRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="soapDoControlServicesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductInformationList">
+      <soap:operation soapAction="getProductInformationList"/>
+      <wsdl:input name="getProductInformationListRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getProductInformationListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ControlCenterServices">
+    <wsdl:port name="ControlCenterServicesPort" binding="tns:ControlCenterServicesBinding">
+      <soap:address location="https://localhost:8443/controlcenterservice2/services/ControlCenterServices"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
