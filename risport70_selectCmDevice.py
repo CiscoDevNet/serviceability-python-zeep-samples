@@ -46,16 +46,16 @@ class MyLoggingPlugin( Plugin ):
     def egress( self, envelope, http_headers, operation, binding_options ):
 
         # Format the request body as pretty printed XML
-        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
+        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode' )
 
-        print( f'\nRequest\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
+        print( f'\nRequest\n-------\nHeaders:\n{ http_headers }\n\nBody:\n{ xml }' )
 
     def ingress( self, envelope, http_headers, operation ):
 
         # Format the response body as pretty printed XML
-        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
+        xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode' )
 
-        print( f'\nResponse\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
+        print( f'\nResponse\n-------\nHeaders:\n{ http_headers }\n\nBody:\n{ xml }' )
 
 # The first step is to create a SOAP client session
 
@@ -86,7 +86,7 @@ client = Client( WSDL_FILE, settings = settings, transport = transport, plugins 
 # Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
 service = client.create_service(
     '{http://schemas.cisco.com/ast/soap}RisBinding',
-    f'https://{creds.CUCM_ADDRESS}:8443/realtimeservice2/services/RISService70' 
+    f'https://{ creds.CUCM_ADDRESS }:8443/realtimeservice2/services/RISService70' 
 )
 
 # Build and execute the request object
@@ -109,8 +109,8 @@ criteria = {
 
 # One or more specific devices can be retrieved by replacing * with
 # the device name in multiple items
-criteria['SelectItems']['item'].append(
-    { 'Item': '*'}
+criteria[ 'SelectItems' ][ 'item' ].append(
+    { 'Item': '*' }
 )
 
 # Execute the request
@@ -118,17 +118,17 @@ criteria['SelectItems']['item'].append(
 try:
     resp = service.selectCmDevice( stateInfo, criteria )
 except Fault as err:
-    print( f'Zeep error: selectCmDevice: {err}' )
+    print( f'Zeep error: selectCmDevice: { err }' )
 else:
     print( 'selectCmDevice response:\n' )
-    print(resp, '\n')
+    print( resp, '\n' )
 
 for node in resp[ 'SelectCmDeviceResult' ][ 'CmNodes' ][ 'item' ]:
 
     if node[ 'ReturnCode' ] != 'Ok':
         continue
 
-    print( 'Node: ', node['Name'] )
+    print( 'Node: ', node[ 'Name'] )
     print()
 
     print( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
@@ -147,7 +147,7 @@ for node in resp[ 'SelectCmDeviceResult' ][ 'CmNodes' ][ 'item' ]:
 
         ipaddresses = device[ 'IPAddress' ]
 
-        ipaddress = ipaddresses[ 'item' ][0][ 'IP' ] if ipaddresses else ''
+        ipaddress = ipaddresses[ 'item' ][ 0 ][ 'IP' ] if ipaddresses else ''
 
         print ( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
             name = device[ 'Name' ], 
