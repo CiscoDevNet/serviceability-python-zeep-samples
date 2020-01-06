@@ -103,14 +103,14 @@ criteria = {
     'Protocol': 'Any',  
     'DownloadStatus': 'Any', 
     'SelectItems': {
-        'Item': [ ]
+        'item': [ ]
     } 
 }
 
 # One or more specific devices can be retrieved by replacing * with
 # the device name in multiple items
-criteria['SelectItems']['Item'].append(
-    { 'item': '*'}
+criteria['SelectItems']['item'].append(
+    { 'Item': '*'}
 )
 
 # Execute the request
