@@ -1,0 +1,6 @@
+# Configure your CUCM address and Risport API user credentials here
+# Be sure to rename this file '.env'
+
+CUCM_ADDRESS=
+USERNAME=
+PASSWORD=

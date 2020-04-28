@@ -29,9 +29,12 @@ from requests.auth import HTTPBasicAuth
 from zeep import Client, Settings, Plugin
 from zeep.transports import Transport
 from zeep.exceptions import Fault
+import time
 
-# Configure CUCM location and user credentials in creds.py
-import creds
+# Edit .env file to specify your Webex site/user details
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Change to true to enable output of request/response headers and XML
 DEBUG = False
@@ -58,11 +61,9 @@ class MyLoggingPlugin( Plugin ):
         print( f'\nResponse\n-------\nHeaders:\n{ http_headers }\n\nBody:\n{ xml }' )
 
 # The first step is to create a SOAP client session
-
 session = Session()
 
 # We avoid certificate verification by default
-
 session.verify = False
 
 # To enabled SSL cert checking (recommended for production)
@@ -72,7 +73,7 @@ session.verify = False
 # CERT = 'changeme.pem'
 # session.verify = CERT
 
-session.auth = HTTPBasicAuth(creds.USERNAME, creds.PASSWORD)
+session.auth = HTTPBasicAuth( os.getenv( 'USERNAME' ), os.getenv( 'PASSWORD' ) )
 
 transport = Transport( session = session, timeout = 10 )
 
@@ -86,7 +87,7 @@ client = Client( WSDL_FILE, settings = settings, transport = transport, plugins 
 # Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
 service = client.create_service(
     '{http://schemas.cisco.com/ast/soap}RisBinding',
-    f'https://{ creds.CUCM_ADDRESS }:8443/realtimeservice2/services/RISService70' 
+    f'https://{ os.getenv( "CUCM_ADDRESS" ) }:8443/realtimeservice2/services/RISService70' 
 )
 
 # Build and execute the request object
@@ -97,7 +98,7 @@ criteria = {
     'MaxReturnedDevices': '1000',  
     'DeviceClass': 'Phone',  
     'Model': '255',  
-    'Status': 'Registered',  
+    'Status': 'Any',  
     'NodeName': '',  
     'SelectBy': 'Name',  
     'Protocol': 'Any',  
@@ -114,7 +115,6 @@ criteria[ 'SelectItems' ][ 'item' ].append(
 )
 
 # Execute the request
-
 try:
     resp = service.selectCmDevice( stateInfo, criteria )
 except Fault as err:
@@ -131,31 +131,54 @@ for node in resp[ 'SelectCmDeviceResult' ][ 'CmNodes' ][ 'item' ]:
     print( 'Node: ', node[ 'Name'] )
     print()
 
-    print( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
+    print( '{name:16}{ip:16}{dirn:11}{status:13}{desc:16}{ts:17}'.format(
     name = 'Name',
     ip = 'IP Address',
-    dirn = 'Directory Numbers',
-    desc = 'Description' ) )
+    dirn = 'DN',
+    status = 'Status',
+    desc = 'Description',
+    ts = 'Time' ) )
 
-    print( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
-        name = '-'*17,
-        ip = '-'*17,
-        dirn = '-'*27,
-        desc = '-'*25 ) )
+    print( '{name:16}{ip:16}{dirn:11}{status:13}{desc:16}{ts:17}'.format(
+        name = '-'*15,
+        ip = '-'*15,
+        dirn = '-'*10,
+        status = '-'*12,
+        desc = '-'*15,
+        ts = '-'*16 ) )
 
     for device in node[ 'CmDevices' ][ 'item' ]:
 
         ipaddresses = device[ 'IPAddress' ]
-
         ipaddress = ipaddresses[ 'item' ][ 0 ][ 'IP' ] if ipaddresses else ''
+        description = device[ 'Description' ] if device[ 'Description' ] != None else ''
+        devicename = device[ 'Name' ]
+        timestamp = time.strftime( '%Y/%m/%d %H:%M', time.localtime( device[ 'TimeStamp' ] ) )
 
-        print ( '{name:19}{ip:19}{dirn:29}{desc:19}'.format(
-            name = device[ 'Name' ], 
-            ip = ipaddress, 
-            dirn = device[ 'DirNumber' ], 
-            desc = device[ 'Description' ] ) )
+        if device[ 'LinesStatus' ] == None:
+            print( '{name:16}{ip:16}{dirn:11}{status:13}{desc:16}{ts:17}'.format(
+                name = devicename, 
+                ip = ipaddress, 
+                dirn = ' ',
+                status = ' ',
+                desc = description,
+                ts = timestamp ) )
+        else:
+            for x in range( 0, len( device[ 'LinesStatus' ][ 'item' ] ) ):
 
-    print()
+                if x == 0:
+                    print( '{name:16}{ip:16}{dirn:11}{status:13}{desc:16}{ts:17}'.format(
+                        name = devicename, 
+                        ip = ipaddress, 
+                        dirn = device[ 'LinesStatus' ][ 'item' ][ x ][ 'DirectoryNumber' ],
+                        status = device[ 'LinesStatus' ][ 'item' ][ x ][ 'Status' ],
+                        desc = description,
+                        ts = timestamp ) )
+                else:
+                    print( '{pad:32}{dirn:11}{status:13}'.format(
+                        pad = ' ',
+                        dirn = device[ 'LinesStatus' ][ 'item' ][ x ][ 'DirectoryNumber' ],
+                        status = device[ 'LinesStatus' ][ 'item' ][ x ][ 'Status' ] ) )
 
 
 

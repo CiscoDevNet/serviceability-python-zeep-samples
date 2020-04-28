@@ -16,17 +16,24 @@ https://developer.cisco.com/site/sxml/
 
 ## Getting started
 
-* Install 3.7
+* Install Python 3
 
   (On Windows, choose the option to add to PATH environment variable)
 
+* Clone this repository:
+
+    ```bash
+    git clone https://www.github.com/CiscoDevNet/serviceability-python-zeep-samples
+    ```
+
 * Dependency Installation:
 
-  ```bash
-  pip install -r requirements.txt
-  ```
+    ```bash
+    cd serviceability-python-zeep-samples
+    pip install -r requirements.txt
+    ```
   
-* Edit `creds.py` to specify your CUCM address and [Serviceability API user credentials](https://d1nmyq4gcgsfi5.cloudfront.net/site/sxml/help/faq/#sec-1)
+* Rename the file `.env.example` to `.env` and edit to specify your CUCM address and [Serviceability API user credentials](https://d1nmyq4gcgsfi5.cloudfront.net/site/sxml/help/faq/#sec-1)
 
 * The Serviceability SOAP API WSDL files for CUCM v12.5 are included in this project.  If you'd like to use a different version, replace the files in `schema/` with the versions from your CUCM, which can be retrieved at:
 

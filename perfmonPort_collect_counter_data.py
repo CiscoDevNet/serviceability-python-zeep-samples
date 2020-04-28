@@ -33,8 +33,10 @@ from zeep import Client, Settings, Plugin
 from zeep.transports import Transport
 from zeep.exceptions import Fault
 
-# Configure CUCM location and AXL credentials in creds.py
-import creds
+# Edit .env file to specify your Webex site/user details
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Change to true to enable output of request/response headers and XML
 DEBUG = False
@@ -61,11 +63,9 @@ class MyLoggingPlugin( Plugin ):
         print( f'\nResponse\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
 
 # The first step is to create a SOAP client session
-
 session = Session()
 
 # We disable certificate verification by default
-
 session.verify = False
 
 # To enabled SSL cert checking (recommended for production)
@@ -75,7 +75,7 @@ session.verify = False
 # CERT = 'changeme.pem'
 # session.verify = CERT
 
-session.auth = HTTPBasicAuth( creds.USERNAME, creds.PASSWORD )
+session.auth = HTTPBasicAuth( os.getenv( 'USERNAME' ), os.getenv( 'PASSWORD' ) )
 
 transport = Transport( session = session, timeout = 10 )
 
@@ -91,13 +91,13 @@ client = Client( WSDL_FILE, settings = settings, transport = transport, plugins 
 # Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
 service = client.create_service(
     '{http://schemas.cisco.com/ast/soap}PerfmonBinding',
-    f'https://{creds.CUCM_ADDRESS}:8443/perfmonservice2/services/PerfmonService' 
+    f'https://{ os.getenv( "CUCM_ADDRESS" ) }:8443/perfmonservice2/services/PerfmonService' 
     )
 
 # Execute the request
 try:
 	resp = service.perfmonCollectCounterData(
-        Host = creds.CUCM_ADDRESS,
+        Host = os.getenv( "CUCM_ADDRESS" ),
         Object = 'Cisco CallManager'
         )
 except Fault as err:

@@ -33,11 +33,13 @@ from zeep import Client, Settings, Plugin
 from zeep.transports import Transport
 from zeep.exceptions import Fault
 
-# Configure CUCM location and AXL credentials in creds.py
-import creds
+# Edit .env file to specify your Webex site/user details
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Change to true to enable output of request/response headers and XML
-DEBUG = True
+DEBUG = False
 
 # The WSDL is a local file in the working directory, see README
 WSDL_FILE = 'schema/ControlCenterServices.wsdl'
@@ -75,7 +77,7 @@ session.verify = False
 # CERT = 'changeme.pem'
 # session.verify = CERT
 
-session.auth = HTTPBasicAuth( creds.USERNAME, creds.PASSWORD )
+session.auth = HTTPBasicAuth( os.getenv( 'USERNAME' ), os.getenv( 'PASSWORD' ) )
 
 transport = Transport( session = session, timeout = 10 )
 
@@ -91,7 +93,7 @@ client = Client( WSDL_FILE, settings = settings, transport = transport, plugins 
 # Create the Zeep service binding to the Perfmon SOAP service at the specified CUCM
 service = client.create_service(
     '{http://schemas.cisco.com/ast/soap}ControlCenterServicesBinding',
-    f'https://{creds.CUCM_ADDRESS}:8443/controlcenterservice2/services/ControlCenterServices' 
+    f'https://{ os.getenv( "CUCM_ADDRESS" ) }:8443/controlcenterservice2/services/ControlCenterServices' 
     )
 
 # Execute the request
@@ -106,7 +108,7 @@ else:
 input( 'Press Enter to continue...' )
 
 # Create a simple report of the XML response
-print( '\ngetProductInformationList output - Products' )
+print( '\nInstalled Products' )
 print( ( '=' * 65 ) + '\n' )
 
 # Loop through the top-level of the response object
