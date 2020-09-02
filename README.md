@@ -14,7 +14,12 @@ https://developer.cisco.com/site/sxml/
 
 * `services_getProductInformationList.py` - Use Control Center Services to retrieve a list of the installed Products and versions (`<getProductInformationList>`)
 
-* `perfmonPort_collectSession_data.py` - Uses Perfmonport to start a collection session, add example counters, then periodically retrieve/parse the results (`<perfmonOpenSession>`, `<perfmonAddCounter>`,`<perfmonCollectCounterData>`)
+* `perfmonPort_collectSession_data.py` - (Mac/Linux only) Uses Perfmonport to start a collection session, add example counters, then periodically retrieve/parse the results (`<perfmonOpenSession>`, `<perfmonAddCounter>`,`<perfmonCollectCounterData>`)
+
+Tested using:
+
+* Ubuntu 20.04
+* Python 3.8.2
 
 ## Getting started
 

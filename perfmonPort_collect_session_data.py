@@ -5,6 +5,8 @@ counters with <perfmonAddCounter>, periodically refreshes/parses/prints counter
 data with <perfmonCollectSessionData>, then waits for a keypress before cleaning
 up the session with <perfmonCloseSession>
 
+Note: this sample uses the 'curses' module, which is not supported fon Windows
+
 Copyright (c) 2020 Cisco and/or its affiliates.
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
