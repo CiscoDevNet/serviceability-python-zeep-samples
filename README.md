@@ -14,6 +14,8 @@ https://developer.cisco.com/site/sxml/
 
 * `services_getProductInformationList.py` - Use Control Center Services to retrieve a list of the installed Products and versions (`<getProductInformationList>`)
 
+* `perfmonPort_collectSession_data.py` - Uses Perfmonport to start a collection session, add example counters, then periodically retrieve/parse the results (`<perfmonOpenSession>`, `<perfmonAddCounter>`,`<perfmonCollectCounterData>`)
+
 ## Getting started
 
 * Install Python 3
@@ -32,6 +34,19 @@ https://developer.cisco.com/site/sxml/
     cd serviceability-python-zeep-samples
     pip install -r requirements.txt
     ```
+
+* (Optional) Create/activate a Python virtual environment named `venv`:
+
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
+
+* Open the project in Visual Studio Code:
+
+    ```bash
+    code .
+    ```
   
 * Rename the file `.env.example` to `.env` and edit to specify your CUCM address and [Serviceability API user credentials](https://d1nmyq4gcgsfi5.cloudfront.net/site/sxml/help/faq/#sec-1)
 
@@ -45,9 +60,9 @@ https://developer.cisco.com/site/sxml/
 
     * RisPort70: `https://{cucm}:8443/realtimeservice2/services/RISService70?wsdl`
 
-    * Control Center Services: `https://ServerName:8443/controlcenterservice2/services/ControlCenterServices?wsdl`
+    * Control Center Services: `https://{cucm}:8443/controlcenterservice2/services/ControlCenterServices?wsdl`
 
-    * Control Center Services Extended: `https://ServerName:8443/controlcenterservice2/services/ControlCenterServicesEx?wsdl`
+    * Control Center Services Extended: `https://{cucm}:8443/controlcenterservice2/services/ControlCenterServicesEx?wsdl`
 
 ## Hints
 

@@ -26,6 +26,7 @@ SOFTWARE.
 """
 
 from lxml import etree
+import requests
 from requests import Session
 from requests.auth import HTTPBasicAuth
 
@@ -33,22 +34,25 @@ from zeep import Client, Settings, Plugin
 from zeep.transports import Transport
 from zeep.exceptions import Fault
 
-# Edit .env file to specify your Webex site/user details
 import os
+import sys
+
+# Edit .env file to specify your Webex site/user details
 from dotenv import load_dotenv
 load_dotenv()
 
-# Change to true to enable output of request/response headers and XML
-DEBUG = False
+# Set DEBUG=True in .env to enable output of request/response headers and XML
+DEBUG = os.getenv( 'DEBUG' ) == 'True'
 
 # The WSDL is a local file in the working directory, see README
 WSDL_FILE = 'schema/PerfmonService.wsdl'
 
 # This class lets you view the incoming and outgoing HTTP headers and XML
-
 class MyLoggingPlugin( Plugin ):
 
     def egress( self, envelope, http_headers, operation, binding_options ):
+
+        if not DEBUG: return
 
         # Format the request body as pretty printed XML
         xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
@@ -56,6 +60,8 @@ class MyLoggingPlugin( Plugin ):
         print( f'\nRequest\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}' )
 
     def ingress( self, envelope, http_headers, operation ):
+
+        if not DEBUG: return
 
         # Format the response body as pretty printed XML
         xml = etree.tostring( envelope, pretty_print = True, encoding = 'unicode')
@@ -67,6 +73,8 @@ session = Session()
 
 # We disable certificate verification by default
 session.verify = False
+# Suppress the console warning about the resulting insecure requests
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 
 # To enabled SSL cert checking (recommended for production)
 # place the CUCM Tomcat cert .pem file in the root of the project
@@ -94,17 +102,18 @@ service = client.create_service(
     f'https://{ os.getenv( "CUCM_ADDRESS" ) }:8443/perfmonservice2/services/PerfmonService' 
     )
 
-# Execute the request
+# Execute the perfmonCollectCounterData request
 try:
 	resp = service.perfmonCollectCounterData(
         Host = os.getenv( "CUCM_ADDRESS" ),
         Object = 'Cisco CallManager'
         )
 except Fault as err:
-	print( f'Zeep error: perfmonCollectCounterData: {err}' )
-else:
-	print( "\nperfmonCollectCounterData response:\n" )
-	print( resp,"\n" )
+    print( f'Zeep error: perfmonCollectCounterData: {err}' )
+    sys.exit( 1 )
+
+print( "\nperfmonCollectCounterData response:\n" )
+print( resp,"\n" )
 
 input( 'Press Enter to continue...' )
 
