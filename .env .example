@@ -1,6 +1,11 @@
-# Configure your CUCM address and Risport API user credentials here
+# Configuration settings used by alls amples
 # Be sure to rename this file '.env'
 
+# Configure your CUCM address and Risport API user credentials here
 CUCM_ADDRESS=
 USERNAME=
 PASSWORD=
+
+# Print detailed debug output of all HTTP requests/responses
+# Options: True/False
+DEBUG=False
