@@ -16,10 +16,12 @@ https://developer.cisco.com/site/sxml/
 
 * `perfmonPort_collectSession_data.py` - (Mac/Linux only) Uses Perfmonport to start a collection session, add example counters, then periodically retrieve/parse the results (`<perfmonOpenSession>`, `<perfmonAddCounter>`,`<perfmonCollectCounterData>`)
 
+* `logCollection_GetOneFile.py` - Performs a listing of log files available for a specific service (Cisco Audit Logs), retrieves the contents of the latest file, then parses/prints a few lines of the results (`<selectLogFiles>`, `<GetOneFile>`)
+
 Tested using:
 
-* Ubuntu 20.04
-* Python 3.8.2
+* Ubuntu 20.10
+* Python 3.8.6
 
 ## Getting started
 
