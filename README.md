@@ -18,6 +18,8 @@ https://developer.cisco.com/site/sxml/
 
 * `logCollection_GetOneFile.py` - Performs a listing of log files available for a specific service (Cisco Audit Logs), retrieves the contents of the latest file, then parses/prints a few lines of the results (`<selectLogFiles>`, `<GetOneFile>`)
 
+* `services_soapGetServiceStatus.py` - Performs a `<soapGetServiceStatus>` request using the Zeep SOAP library.
+
 Tested using:
 
 * Ubuntu 20.10
@@ -33,13 +35,7 @@ Tested using:
 
     ```bash
     git clone https://www.github.com/CiscoDevNet/serviceability-python-zeep-samples
-    ```
-
-* Dependency Installation:
-
-    ```bash
     cd serviceability-python-zeep-samples
-    pip install -r requirements.txt
     ```
 
 * (Optional) Create/activate a Python virtual environment named `venv`:
@@ -47,6 +43,12 @@ Tested using:
     ```bash
     python3 -m venv venv
     source venv/bin/activate
+    ```
+
+* Install needed dependency packages:
+
+    ```bash
+    pip install -r requirements.txt
     ```
 
 * Open the project in Visual Studio Code:
@@ -76,7 +78,7 @@ Tested using:
 * You can get a 'dump' of an API WSDL to see how Zeep interprets it, for example by running (Mac/Linux):
 
     ```bash
-    python3 -mzeep schema/PerfmonService.wsdl > PerfmonServiceWsdl.txt
+    python -mzeep schema/PerfmonService.wsdl > PerfmonServiceWsdl.txt
     ```
 
     This can help with identifying the proper object structure to send to Zeep
