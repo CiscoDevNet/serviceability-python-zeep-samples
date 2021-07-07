@@ -45,7 +45,6 @@ load_dotenv()
 # Set DEBUG=True in .env to enable output of request/response headers and XML
 DEBUG = os.getenv( 'DEBUG' ) == 'True'
 
-
 # The WSDL is a local file in the working directory, see README
 WSDL_FILE = 'schema/LogCollectionPortTypeService.wsdl'
 

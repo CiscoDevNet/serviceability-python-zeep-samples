@@ -22,8 +22,8 @@ https://developer.cisco.com/site/sxml/
 
 Tested using:
 
-* Ubuntu 20.10
-* Python 3.8.6
+* Ubuntu 20.10 / Python 3.8.6
+* Mac OS 11.4 / Python 3.9.6
 
 ## Getting started
 
