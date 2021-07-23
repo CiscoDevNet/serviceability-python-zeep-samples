@@ -20,9 +20,12 @@ https://developer.cisco.com/site/sxml/
 
 * `services_soapGetServiceStatus.py` - Performs a `<soapGetServiceStatus>` request using the Zeep SOAP library.
 
+* `services_doControlServices.py` - Performs a `<soapDoControlServices>` request using the Zeep SOAP library,
+periodically checks the status using `<soapGetServiceStatus>` and parses/prints the results in a simple table output.
+
 Tested using:
 
-* Ubuntu 20.10 / Python 3.8.6
+* Ubuntu 21.04 / Python 3.9.5
 * Mac OS 11.4 / Python 3.9.6
 
 ## Getting started
