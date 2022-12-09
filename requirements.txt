@@ -1,6 +1,6 @@
 attrs==22.1.0
 cached-property==1.5.2
-certifi==2022.6.15
+certifi==2022.12.7
 charset-normalizer==2.1.0
 idna==3.3
 isodate==0.6.1
