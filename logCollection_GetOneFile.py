@@ -26,6 +26,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import copy
 from lxml import etree
 import requests
 from requests import Session
@@ -67,10 +68,22 @@ class MyLoggingPlugin(Plugin):
         if not DEBUG:
             return
 
-        # Format the response body as pretty printed XML
-        xml = etree.tostring(envelope, pretty_print=True, encoding="unicode")
+        # Modify the plugin to selectively remove large binary file content
+        # from GetOneFile response
+        if envelope.find("./{*}Body/{*}GetOneFileReturn") is not None:
+            display_xml = copy.deepcopy(envelope)
+            display_xml.find(
+                "./{*}Body/{*}GetOneFileReturn"
+            ).text = "REMOVED_FOR_BREVITY"
+            # Format the response body as pretty printed XML
+            xml_string = etree.tostring(
+                display_xml, pretty_print=True, encoding="unicode"
+            )
+        else:
+            # Format the response body as pretty printed XML
+            xml_string = etree.tostring(envelope, pretty_print=True, encoding="unicode")
 
-        print(f"\nResponse\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml}")
+        print(f"\nResponse\n-------\nHeaders:\n{http_headers}\n\nBody:\n{xml_string}")
 
 
 # The first step is to create a SOAP client session
@@ -90,8 +103,8 @@ requests.packages.urllib3.disable_warnings(
 # CERT = 'changeme.pem'
 # session.verify = CERT
 
-session.auth = HTTPBasicAuth(os.getenv("USERNAME"), os.getenv("PASSWORD"))
-
+session.auth = HTTPBasicAuth(os.getenv("CUCM_USERNAME"), os.getenv("PASSWORD"))
+print(os.getenv("CUCM_USERNAME"), os.getenv("PASSWORD"))
 transport = Transport(session=session, timeout=10)
 
 # strict=False is not always necessary, but it allows zeep to parse imperfect XML

@@ -1,278 +1,267 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://schemas.cisco.com/ast/soap" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://schemas.cisco.com/ast/soap" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
-  <wsdl:types>
-    <schema elementFormDefault="qualified" targetNamespace="http://schemas.cisco.com/ast/soap" xmlns="http://www.w3.org/2001/XMLSchema">
-   
-   <element name="FileName" type="xsd:string"/>
-   <element name="GetOneFileReturn" type="xsd:base64Binary" xmime:expectedContentTypes="*/*" xmlns:xmime="http://www.w3.org/2005/05/xmlmime"/>
-   <element name="LocalHost" type="xsd:string"/>
-   <element name="TimeZone" type="xsd:string"/>
-  
-   <element name="listNodeServiceLogs">
-    <complexType>
-     <sequence>
-      <element name="ListRequest" type="tns:ListRequest"/>
-     </sequence>
-    </complexType>
-   </element>
-   <complexType name="ListRequest">
-    <simpleContent>
-     <extension base="xsd:string"/>
-    </simpleContent>
-   </complexType>
-   <element name="listNodeServiceLogsResponse">
-    <complexType>
-     <sequence>
-      <element maxOccurs="unbounded" name="listNodeServiceLogsReturn" type="tns:NodeServiceLogList"/>
-     </sequence>
-    </complexType>
-   </element>
-   <complexType name="NodeServiceLogList">
-    <sequence>
-     <element name="name" nillable="true" type="xsd:string"/>
-     <element name="ServiceLog" nillable="true" type="tns:ArrayOfServiceLog"/>
-     <element name="SystemLog" nillable="true" type="tns:ArrayOfSystemLog"/>
-    </sequence>
-   </complexType>
-   
-   
-   <element name="selectLogFiles">
-    <complexType>
-     <sequence>
-      <element name="FileSelectionCriteria" type="tns:SchemaFileSelectionCriteria"/>
-     </sequence>
-    </complexType>
-   </element>
-   <complexType name="SchemaFileSelectionCriteria">
-    <sequence>
-     <element name="ServiceLogs" nillable="true" type="tns:ArrayOfServiceLog"/>
-     <element name="SystemLogs" nillable="true" type="tns:ArrayOfSystemLog"/>
-     <element name="SearchStr" nillable="true" type="xsd:string"/>
-     <element name="Frequency" nillable="true" type="tns:Frequency"/>
-     <element name="JobType" nillable="true" type="tns:JobType"/>
-     <element name="ToDate" nillable="true" type="xsd:string"/>
-     <element name="FromDate" nillable="true" type="xsd:string"/>
-     <element name="TimeZone" nillable="true" type="xsd:string"/>
-     <element name="RelText" nillable="true" type="tns:RelText"/>
-     <element name="RelTime" type="xsd:byte"/>
-     <element name="Port" type="xsd:byte"/>
-     <element name="IPAddress" nillable="true" type="xsd:string"/>
-     <element name="UserName" nillable="true" type="xsd:string"/>
-     <element name="Password" nillable="true" type="xsd:string"/>
-     <element name="ZipInfo" type="xsd:boolean"/>
-     <element name="RemoteFolder" nillable="true" type="xsd:string"/>
-    </sequence>
-   </complexType>
-
-   <complexType name="ArrayOfServiceLog">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:string"/>
-    </sequence>
-   </complexType>  
- 
- 
-   <complexType name="ArrayOfSystemLog">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:string"/>
-    </sequence>
-   </complexType>  
-  
-   <complexType name="File">
-    <sequence>
-     <element name="name" nillable="true" type="xsd:string"/>
-     <element name="absolutepath" nillable="true" type="xsd:string"/>
-     <element name="filesize" nillable="true" type="xsd:string"/>
-     <element name="modifiedDate" nillable="true" type="xsd:string"/>
-    </sequence>
-   </complexType>
-   <complexType name="ArrayOfFile">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="File" nillable="true" type="tns:File"/>
-    </sequence>
-   </complexType>
-   <complexType name="ServiceLogs">
-    <sequence>
-     <element name="name" nillable="true" type="xsd:string"/>
-     <element name="SetOfFiles" nillable="true" type="tns:ArrayOfFile"/>
-    </sequence>
-   </complexType>
-   <complexType name="ArrayOfServiceLogs">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="ServiceLogs" nillable="true" type="tns:ServiceLogs"/>
-    </sequence>
-   </complexType>
-   <complexType name="SchemaFileSelectionResult">
-    <sequence>
-     <element name="Node" nillable="true" type="tns:Node"/>
-    </sequence>
-   </complexType>
-   <complexType name="Schedule">
-    <sequence>
-     <element name="id" nillable="true" type="xsd:string"/>
-     <element name="EndTime" nillable="true" type="xsd:string"/>
-     <element name="FrequencyType" nillable="true" type="xsd:string"/>
-     <element name="NodeName" nillable="true" type="xsd:string"/>
-     <element name="StartTime" nillable="true" type="xsd:string"/>
-     <element name="Status" nillable="true" type="xsd:string"/>
-    </sequence>
-   </complexType>
-   <complexType name="ArrayOfSchedule">
-    <sequence>
-     <element maxOccurs="unbounded" minOccurs="0" name="Schedule" type="tns:Schedule"/>
-    </sequence>
-   </complexType>
-   
-   
-   <element name="selectLogFilesResponse">
-   <complexType>
-     <sequence>
-       <element name="ResultSet" type="tns:ResultSet"/>
-     </sequence>
-    </complexType>
-   </element>
-       
-   <complexType name="ResultSet">
-      <sequence>
-            <element name="SchemaFileSelectionResult" type="tns:SchemaFileSelectionResult"/>
-     </sequence>
-  </complexType>
-   
-  
-  
-     <simpleType name="Frequency">
-    <restriction base="xsd:string">
-     <enumeration value="OnDemand"/>
-     <enumeration value="Weekly"/>
-     <enumeration value="Monthly"/>
-     <enumeration value="Daily"/>
-    </restriction>
-   </simpleType>
-   <simpleType name="JobType">
-    <restriction base="xsd:string">
-     <enumeration value="DownloadtoClient"/>
-     <enumeration value="PushtoSFTPServer"/>
-    </restriction>
-   </simpleType>
-   <simpleType name="RelText">
-    <restriction base="xsd:string">
-     <enumeration value="None"/>
-     <enumeration value="Minutes"/>
-     <enumeration value="Hours"/>
-     <enumeration value="Weeks"/>
-     <enumeration value="Months"/>
-     <enumeration value="Days"/>
-    </restriction>
-   </simpleType>
-  
-   <complexType name="Node">
-    <sequence>
-     <element name="name" nillable="true" type="xsd:string"/>
-     <element name="ServiceList" nillable="true" type="tns:ArrayOfServiceLogs"/>
-    </sequence>
-   </complexType>
-
-  </schema>
-  </wsdl:types>
-  <wsdl:message name="selectLogFilesRequest">
-    <wsdl:part name="parameters" element="tns:selectLogFiles">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="listNodeServiceLogsResponse">
-    <wsdl:part name="parameters" element="tns:listNodeServiceLogsResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="listNodeServiceLogsRequest">
-    <wsdl:part name="parameters" element="tns:listNodeServiceLogs">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetOneFileResponse">
-    <wsdl:part name="GetOneFileReturn" element="tns:GetOneFileReturn">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="getTimeZoneResponse">
-    <wsdl:part name="getTimeZone" element="tns:TimeZone">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="getTimeZoneRequest">
-    <wsdl:part name="localhost" element="tns:LocalHost">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="GetOneFileRequest">
-    <wsdl:part name="FileName" element="tns:FileName">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:message name="selectLogFilesResponse">
-    <wsdl:part name="parameters" element="tns:selectLogFilesResponse">
-    </wsdl:part>
-  </wsdl:message>
-  <wsdl:portType name="LogCollectionPortType">
-    <wsdl:operation name="getTimeZone">
-      <wsdl:input name="getTimeZoneRequest" message="tns:getTimeZoneRequest">
-    </wsdl:input>
-      <wsdl:output name="getTimeZoneResponse" message="tns:getTimeZoneResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetOneFile">
-      <wsdl:input name="GetOneFileRequest" message="tns:GetOneFileRequest">
-    </wsdl:input>
-      <wsdl:output name="GetOneFileResponse" message="tns:GetOneFileResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="listNodeServiceLogs">
-      <wsdl:input name="listNodeServiceLogsRequest" message="tns:listNodeServiceLogsRequest">
-    </wsdl:input>
-      <wsdl:output name="listNodeServiceLogsResponse" message="tns:listNodeServiceLogsResponse">
-    </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="selectLogFiles">
-      <wsdl:input name="selectLogFilesRequest" message="tns:selectLogFilesRequest">
-    </wsdl:input>
-      <wsdl:output name="selectLogFilesResponse" message="tns:selectLogFilesResponse">
-    </wsdl:output>
-    </wsdl:operation>
-  </wsdl:portType>
-  <wsdl:binding name="LogCollectionPortSoapBinding" type="tns:LogCollectionPortType">
-    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="getTimeZone">
-      <soap:operation soapAction="getTimeZone"/>
-      <wsdl:input name="getTimeZoneRequest">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="getTimeZoneResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetOneFile">
-      <soap:operation soapAction="GetOneFile"/>
-      <wsdl:input name="GetOneFileRequest">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="GetOneFileResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="listNodeServiceLogs">
-      <soap:operation soapAction="listNodeServiceLogs"/>
-      <wsdl:input name="listNodeServiceLogsRequest">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="listNodeServiceLogsResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="selectLogFiles">
-      <soap:operation soapAction="selectLogFiles"/>
-      <wsdl:input name="selectLogFilesRequest">
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output name="selectLogFilesResponse">
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
-  </wsdl:binding>
-  <wsdl:service name="LogCollectionPortTypeService">
-    <wsdl:port name="LogCollectionPort" binding="tns:LogCollectionPortSoapBinding">
-      <soap:address location="https://localhost:8443/logcollectionservice2/services/LogCollectionPortTypeService"/>
-    </wsdl:port>
-  </wsdl:service>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+    xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://schemas.cisco.com/ast/soap"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    targetNamespace="http://schemas.cisco.com/ast/soap">
+    <wsdl:documentation>LogCollectionPortTypeService</wsdl:documentation>
+    <wsdl:types>
+        <xsd:schema xmlns="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+            elementFormDefault="qualified" targetNamespace="http://schemas.cisco.com/ast/soap">
+            <xsd:element name="FileName" type="string" />
+            <xsd:element xmlns:xmime="http://www.w3.org/2005/05/xmlmime" name="GetOneFileReturn"
+                type="base64Binary" xmime:expectedContentTypes="*/*" />
+            <xsd:element name="LocalHost" type="string" />
+            <xsd:element name="TimeZone" type="string" />
+            <xsd:element name="listNodeServiceLogs">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ListRequest" type="tns:ListRequest" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:complexType name="ListRequest">
+                <xsd:simpleContent>
+                    <xsd:extension base="string" />
+                </xsd:simpleContent>
+            </xsd:complexType>
+            <xsd:element name="listNodeServiceLogsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="unbounded" name="listNodeServiceLogsReturn"
+                            type="tns:NodeServiceLogList" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:complexType name="NodeServiceLogList">
+                <xsd:sequence>
+                    <xsd:element name="name" nillable="true" type="string" />
+                    <xsd:element name="ServiceLog" nillable="true" type="tns:ArrayOfServiceLog" />
+                    <xsd:element name="SystemLog" nillable="true" type="tns:ArrayOfSystemLog" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="selectLogFiles">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="FileSelectionCriteria"
+                            type="tns:SchemaFileSelectionCriteria" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:complexType name="SchemaFileSelectionCriteria">
+                <xsd:sequence>
+                    <xsd:element name="ServiceLogs" nillable="true" type="tns:ArrayOfServiceLog" />
+                    <xsd:element name="SystemLogs" nillable="true" type="tns:ArrayOfSystemLog" />
+                    <xsd:element name="SearchStr" nillable="true" type="string" />
+                    <xsd:element name="Frequency" nillable="true" type="tns:Frequency" />
+                    <xsd:element name="JobType" nillable="true" type="tns:JobType" />
+                    <xsd:element name="ToDate" nillable="true" type="string" />
+                    <xsd:element name="FromDate" nillable="true" type="string" />
+                    <xsd:element name="TimeZone" nillable="true" type="string" />
+                    <xsd:element name="RelText" nillable="true" type="tns:RelText" />
+                    <xsd:element name="RelTime" type="byte" />
+                    <xsd:element name="Port" type="byte" />
+                    <xsd:element name="IPAddress" nillable="true" type="string" />
+                    <xsd:element name="UserName" nillable="true" type="string" />
+                    <xsd:element name="Password" nillable="true" type="string" />
+                    <xsd:element name="ZipInfo" type="boolean" />
+                    <xsd:element name="RemoteFolder" nillable="true" type="string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfServiceLog">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="item" type="string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfSystemLog">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="item" type="string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="File">
+                <xsd:sequence>
+                    <xsd:element name="name" nillable="true" type="string" />
+                    <xsd:element name="absolutepath" nillable="true" type="string" />
+                    <xsd:element name="filesize" nillable="true" type="string" />
+                    <xsd:element name="modifiedDate" nillable="true" type="string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfFile">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="File" nillable="true"
+                        type="tns:File" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ServiceLogs">
+                <xsd:sequence>
+                    <xsd:element name="name" nillable="true" type="string" />
+                    <xsd:element name="SetOfFiles" nillable="true" type="tns:ArrayOfFile" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfServiceLogs">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="ServiceLogs"
+                        nillable="true" type="tns:ServiceLogs" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="SchemaFileSelectionResult">
+                <xsd:sequence>
+                    <xsd:element name="Node" nillable="true" type="tns:Node" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="Schedule">
+                <xsd:sequence>
+                    <xsd:element name="id" nillable="true" type="string" />
+                    <xsd:element name="EndTime" nillable="true" type="string" />
+                    <xsd:element name="FrequencyType" nillable="true" type="string" />
+                    <xsd:element name="NodeName" nillable="true" type="string" />
+                    <xsd:element name="StartTime" nillable="true" type="string" />
+                    <xsd:element name="Status" nillable="true" type="string" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfSchedule">
+                <xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="0" name="Schedule"
+                        type="tns:Schedule" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:element name="selectLogFilesResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ResultSet" type="tns:ResultSet" />
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:complexType name="ResultSet">
+                <xsd:sequence>
+                    <xsd:element name="SchemaFileSelectionResult"
+                        type="tns:SchemaFileSelectionResult" />
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:simpleType name="Frequency">
+                <xsd:restriction base="string">
+                    <xsd:enumeration value="OnDemand" />
+                    <xsd:enumeration value="Weekly" />
+                    <xsd:enumeration value="Monthly" />
+                    <xsd:enumeration value="Daily" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="JobType">
+                <xsd:restriction base="string">
+                    <xsd:enumeration value="DownloadtoClient" />
+                    <xsd:enumeration value="PushtoSFTPServer" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:simpleType name="RelText">
+                <xsd:restriction base="string">
+                    <xsd:enumeration value="None" />
+                    <xsd:enumeration value="Minutes" />
+                    <xsd:enumeration value="Hours" />
+                    <xsd:enumeration value="Weeks" />
+                    <xsd:enumeration value="Months" />
+                    <xsd:enumeration value="Days" />
+                </xsd:restriction>
+            </xsd:simpleType>
+            <xsd:complexType name="Node">
+                <xsd:sequence>
+                    <xsd:element name="name" nillable="true" type="string" />
+                    <xsd:element name="ServiceList" nillable="true" type="tns:ArrayOfServiceLogs" />
+                </xsd:sequence>
+            </xsd:complexType>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="GetOneFileRequest">
+        <wsdl:part name="FileName" element="tns:FileName" />
+    </wsdl:message>
+    <wsdl:message name="GetOneFileResponse">
+        <wsdl:part name="GetOneFileReturn" element="tns:GetOneFileReturn" />
+    </wsdl:message>
+    <wsdl:message name="listNodeServiceLogsRequest">
+        <wsdl:part name="parameters" element="tns:listNodeServiceLogs" />
+    </wsdl:message>
+    <wsdl:message name="listNodeServiceLogsResponse">
+        <wsdl:part name="parameters" element="tns:listNodeServiceLogsResponse" />
+    </wsdl:message>
+    <wsdl:message name="selectLogFilesRequest">
+        <wsdl:part name="parameters" element="tns:selectLogFiles" />
+    </wsdl:message>
+    <wsdl:message name="selectLogFilesResponse">
+        <wsdl:part name="parameters" element="tns:selectLogFilesResponse" />
+    </wsdl:message>
+    <wsdl:message name="getTimeZoneRequest">
+        <wsdl:part name="localhost" element="tns:LocalHost" />
+    </wsdl:message>
+    <wsdl:message name="getTimeZoneResponse">
+        <wsdl:part name="getTimeZone" element="tns:TimeZone" />
+    </wsdl:message>
+    <wsdl:portType name="LogCollectionPortTypeServicePortType">
+        <wsdl:operation name="GetOneFile">
+            <wsdl:input message="tns:GetOneFileRequest" wsaw:Action="GetOneFile" />
+            <wsdl:output message="tns:GetOneFileResponse"
+                wsaw:Action="http://schemas.cisco.com/ast/soap/LogCollectionPortType/GetOneFileResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="listNodeServiceLogs">
+            <wsdl:input message="tns:listNodeServiceLogsRequest" wsaw:Action="listNodeServiceLogs" />
+            <wsdl:output message="tns:listNodeServiceLogsResponse"
+                wsaw:Action="http://schemas.cisco.com/ast/soap/LogCollectionPortType/listNodeServiceLogsResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="selectLogFiles">
+            <wsdl:input message="tns:selectLogFilesRequest" wsaw:Action="selectLogFiles" />
+            <wsdl:output message="tns:selectLogFilesResponse"
+                wsaw:Action="http://schemas.cisco.com/ast/soap/LogCollectionPortType/selectLogFilesResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getTimeZone">
+            <wsdl:input message="tns:getTimeZoneRequest" wsaw:Action="getTimeZone" />
+            <wsdl:output message="tns:getTimeZoneResponse"
+                wsaw:Action="http://schemas.cisco.com/ast/soap/LogCollectionPortType/getTimeZoneResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="LogCollectionPortSoapBinding"
+        type="tns:LogCollectionPortTypeServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="GetOneFile">
+            <soap:operation soapAction="GetOneFile" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="listNodeServiceLogs">
+            <soap:operation soapAction="listNodeServiceLogs" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="selectLogFiles">
+            <soap:operation soapAction="selectLogFiles" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getTimeZone">
+            <soap:operation soapAction="getTimeZone" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="LogCollectionPortTypeService">
+        <wsdl:port name="LogCollectionPort" binding="tns:LogCollectionPortSoapBinding">
+            <soap:address
+                location="https://localhost:8443/logcollectionservice2/services/LogCollectionPortTypeService" />
+        </wsdl:port>
+    </wsdl:service>
 </wsdl:definitions>
