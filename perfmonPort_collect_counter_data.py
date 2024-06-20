@@ -7,7 +7,7 @@ Dependency Installation:
 
     $ pip3 install -r requirements.txt
 
-Copyright (c) 2018 Cisco and/or its affiliates.
+Copyright (c) 2024 Cisco and/or its affiliates.
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -36,6 +36,7 @@ from zeep.exceptions import Fault
 
 import os
 import sys
+import re
 
 # Edit .env file to specify your Webex site/user details
 from dotenv import load_dotenv
@@ -115,21 +116,26 @@ except Fault as err:
     print(f"Zeep error: perfmonCollectCounterData: {err}")
     sys.exit(1)
 
+
 print("\nperfmonCollectCounterData response:\n")
 print(resp, "\n")
 
 input("Press Enter to continue...")
 
 # Create a simple report of the XML response
-print('\nperfmonCollectCounterData output for "Cisco CallManager"')
-print("=======================================================\n")
 
 # Loop through the top-level of the response object
+print("Object                                           Instance            Value")
+print("===============================================  ==================  ====================")
+print
 for item in resp:
-    # Extract the final value in the counter path, which sould be the counter name
-    counterPath = item.Name._value_1
-    last = counterPath.rfind("\\") + 1
-    counterName = counterPath[last:]
+    _, _, node, object, counter = item.Name._value_1.split('\\')
+    instance = ""
+    search = re.search(r"(.*)\((.*)\)", object)
+    if search:
+        object = search.group(1)
+        instance = search.group(2)
 
     # Print the name and value, padding/truncating the name to 49 characters
-    print("{:49.49}".format(counterName) + " : " + str(item.Value))
+    print(f"{object:49}{instance:20}{counter}")
+    # print("{:49.49}".format(counterName) + " : " + str(item.Value))

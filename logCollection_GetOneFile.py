@@ -8,7 +8,7 @@ Dependency Installation:
 
     $ pip3 install -r requirements.txt
 
-Copyright (c) 2020 Cisco and/or its affiliates.
+Copyright (c) 2024 Cisco and/or its affiliates.
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -189,7 +189,7 @@ except Fault as err:
 
 print("\nGetOneFile: success\n")
 
-# The output will be bytes - convert to UTF-* string
+# The output will be bytes - convert to UTF-8 string
 fileOutput = resp.decode("utf-8")
 # Null out the resp variable in case it was taking up a large amount of memory
 resp = None
